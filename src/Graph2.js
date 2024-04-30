@@ -162,11 +162,11 @@ class Graph2 extends Component {
         .append("text")
         .attr("class", "legendLabel")
         .attr("x", 55) // Position text to the right of the rectangles
-        .attr("y", (d, i) => (legendHeight / 10) * i + legendHeight / 20) // Center text vertically
-        .text((d) => d.toFixed(1)) // Show the corresponding data value with one decimal place
+        .attr("y", (d, i) => (legendHeight / 10) * i + legendHeight / 20) 
+        .text((d) => d.toFixed(1)) 
         .style("text-anchor", "start")
         .style("alignment-baseline", "middle")
-        .style("font-size", "10px"); // Adjust font size for the labels
+        .style("font-size", "10px"); 
 
       // Add title for the legend
       legend
