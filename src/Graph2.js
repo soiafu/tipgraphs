@@ -142,7 +142,7 @@ class Graph2 extends Component {
         .scaleSequential(d3.interpolatePlasma)
         .domain([0, 1]);
 
-      // Create color rectangles 
+      // Create color rectangles for the legend 
       legend
         .selectAll(".legendRect")
         .data(d3.range(0, 1.1, 0.1))
