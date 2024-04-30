@@ -24,7 +24,8 @@ class App extends Component{
       return {
         tip: parseFloat(d.tip),
         total_bill: parseFloat(d.total_bill),
-        day: d.day
+        day: d.day,
+        size: d.size
       };
     }).then(function (csv_data) {
       const columns = csv_data.length > 0 ? Object.keys(csv_data[0]) : [];
