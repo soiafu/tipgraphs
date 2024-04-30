@@ -15,22 +15,21 @@ class Graph2 extends Component {
     var margin = { top: 10, right: 10, bottom: 30, left: 20 },
       w = 500 - margin.left - margin.right,
       h = 250 - margin.top - margin.bottom;
-
+  
     var data = this.props.data2;
     var temp_data = d3.flatRollup(
       data,
       (d) => d.length,
       (d) => d.day
     );
-    console.log(temp_data); // Check the format of the data in the conosole
-
+  
     var container = d3
       .select(".child2_svg")
       .attr("width", w + margin.left + margin.right)
       .attr("height", h + margin.top + margin.bottom)
       .select(".g_2")
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
-
+  
     // X axis
     var x_data = temp_data.map((item) => item[0]);
     var x_scale = d3
@@ -38,7 +37,7 @@ class Graph2 extends Component {
       .domain(x_data)
       .range([margin.left, w])
       .padding(0.2);
-
+  
     container
       .selectAll(".x_axis_g")
       .data([0])
@@ -49,10 +48,11 @@ class Graph2 extends Component {
     // Add Y axis
     var y_data = temp_data.map((item) => item[1]);
     var y_scale = d3
-      .scaleLinear()
-      .domain([0, d3.max(y_data)])
-      .range([h, 0]);
-
+      .scaleBand()
+      .domain(y_data)
+      .range([h, 0])
+      .padding(0.2);
+  
     container
       .selectAll(".y_axis_g")
       .data([0])
@@ -60,7 +60,13 @@ class Graph2 extends Component {
       .attr("class", "y_axis_g")
       .attr("transform", `translate(${margin.left},0)`)
       .call(d3.axisLeft(y_scale));
-
+  
+    // Color scale
+    var color_scale = d3
+      .scaleLinear()
+      .domain([0, d3.max(y_data)])
+      .range(["#f7fbff", "#08306b"]); // Choose your color range
+  
     container
       .selectAll("rect")
       .data(temp_data)
@@ -73,10 +79,10 @@ class Graph2 extends Component {
         return y_scale(d[1]);
       })
       .attr("width", x_scale.bandwidth())
-      .attr("height", function (d) {
-        return h - y_scale(d[1]);
-      })
-      .attr("fill", "#69b3a2");
+      .attr("height", y_scale.bandwidth())
+      .style("fill", function (d) {
+        return color_scale(d[1]);
+      });
   }
   render() {
     return (
