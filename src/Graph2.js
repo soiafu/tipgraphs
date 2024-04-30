@@ -11,6 +11,7 @@ class Graph2 extends Component {
     this.setState({ x_scale: 10 });
   }
 
+  //formulas for calculating the correlation
   calculateCorrelation(data, variable1, variable2) {
     const values1 = data.map((item) => item[variable1]);
     const values2 = data.map((item) => item[variable2]);
@@ -88,7 +89,7 @@ class Graph2 extends Component {
     // Cellsize
     const cellSize = w / numColumns;
 
-    container
+    const rects = container
       .selectAll()
       .data(correlationMatrix)
       .enter()
@@ -102,6 +103,15 @@ class Graph2 extends Component {
       .attr("width", x.bandwidth())
       .attr("height", y.bandwidth())
       .style("fill", (d) => colorScale(d.value));
+
+    // Add click event handler to the rectangles
+    rects.on("click", (event, d) => {
+      console.log(
+        `Clicked on value: ${d.value.toFixed(2)} at (${columns[d.column]}, ${
+          columns[d.row]
+        })`
+      );
+    });
 
     // Display text on the rectangles
     container
@@ -132,7 +142,7 @@ class Graph2 extends Component {
         .scaleSequential(d3.interpolatePlasma)
         .domain([0, 1]);
 
-      // Create color rectangles with corresponding text labels
+      // Create color rectangles 
       legend
         .selectAll(".legendRect")
         .data(d3.range(0, 1.1, 0.1))
