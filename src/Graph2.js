@@ -54,7 +54,7 @@ class Graph2 extends Component {
       .attr("width", w + margin.left + margin.right)
       .attr("height", h + margin.top + margin.bottom)
       .select(".g_2")
-      .attr("transform", `translate(${margin.left}, ${margin.top})`);
+      .attr("transform", `translate(${margin.left}, 20)`);
 
     // Define variables (columns)
     const columns = ["tip", "total_bill", "size"];
@@ -126,7 +126,7 @@ class Graph2 extends Component {
 
       const legend = d3
         .select(".legend")
-        .attr("transform", `translate(450, 80)`);
+        .attr("transform", `translate(450, 20)`);
 
       const legendColorScale = d3
         .scaleSequential(d3.interpolatePlasma)
@@ -162,7 +162,7 @@ class Graph2 extends Component {
       legend
         .append("text")
         .attr("x", 0)
-        .attr("y", 0)
+        .attr("y", -10)
         .text("Correlation")
         .style("text-anchor", "start")
         .style("font-size", "12px");
