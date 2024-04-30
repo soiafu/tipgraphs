@@ -1,5 +1,8 @@
 import React,{Component} from "react";
 import './App.css';
+import Graph1 from "./Graph1";
+import Graph2 from "./Graph2";
+import Graph3 from "./Graph3";
 import * as d3 from 'd3';
 import tips from "./tips.csv";
 
@@ -31,17 +34,16 @@ class App extends Component{
         <div className="header">
           <div className="header-text">Select Target:</div>
           <select>
-            [replace options with actual input from csv]
             <option value="option1">Option 1</option>
             <option value="option2">Option 2</option>
             <option value="option3">Option 3</option>
           </select>
         </div>
         <div className="parent1"> 
-          <div className="graph"></div>
-          <div className="graph"></div>
+          <div className="graph"><Graph1 data1={this.state.data}></Graph1></div>
+          <div className="graph"><Graph2 data2={this.state.data}></Graph2></div>
         </div>
-        <div className="graph"></div>
+        <div className="graph"><Graph3 data3={this.state.data}></Graph3></div>
       </div>
     );
   }
