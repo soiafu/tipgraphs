@@ -12,7 +12,7 @@ class App extends Component{
     this.state = {
       data: [],
       columns: [], // Initialize columns array
-      selectedTarget: null
+      selectedTarget: 'tip'
     };
   }
   
@@ -20,16 +20,23 @@ class App extends Component{
   componentDidMount() {
     const self = this;
 
+    const targetVariables = ['tip', 'total_bill', 'size'];
+    const categoryVariables = ['sex', 'smoker', 'time', 'day'];
+
     d3.csv(tips, function (d) {
-      return {
-        tip: parseFloat(d.tip),
-        total_bill: parseFloat(d.total_bill),
-        day: d.day,
-        size: d.size
-      };
+      let item = {};
+    
+      targetVariables.forEach(key => {
+        item[key] = parseFloat(d[key]);
+      });
+    
+      categoryVariables.forEach(key => {
+        item[key] = d[key];
+      });
+    
+      return item;
     }).then(function (csv_data) {
-      const columns = csv_data.length > 0 ? Object.keys(csv_data[0]) : [];
-      self.setState({ data: csv_data, columns: columns });
+      self.setState({ data: csv_data, columns: targetVariables });
     }).catch(function (err) {
       console.log(err);
     });

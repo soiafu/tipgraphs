@@ -4,85 +4,148 @@ import * as d3 from "d3";
 class Graph1 extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      selectedCategory: 'sex'
+    };
   }
-  componentDidMount() {
-    //console.log("componentDidMount (data is): ", this.props.data1);
-    this.setState({ x_scale: 10 });
+  calculateAverages(data1, selectedCategory, selectedTarget) {
+    console.log('first item in data1:', data1[0]);
+    console.log('selectedCategory:', selectedCategory);
+    console.log('selectedTarget:', selectedTarget);
+  
+    var output = [];
+    var categories = [...new Set(data1.map(item => item[selectedCategory]))];
+    console.log('categories:', categories);
+
+    categories.forEach(cat => {
+      var filteredData = data1.filter(item => item[selectedCategory] === cat);
+      var sum = filteredData.reduce((acc, item) => acc + item[selectedTarget], 0);
+      var average = sum / filteredData.length;
+      output.push([cat, average]);
+      console.log('output:', output);
+    });
+    return output;
   }
+
+  handleRadioChange = (event) => {
+    this.setState({ selectedCategory: event.target.value });
+  };
   componentDidUpdate() {
-    // set the dimensions and margins of the graph
-    var margin = { top: 10, right: 10, bottom: 30, left: 20 },
+    var margin = { top: 5, right: 30, bottom: 60, left: 30 },
       w = 500 - margin.left - margin.right,
       h = 250 - margin.top - margin.bottom;
 
+      var svg = d3.select(".child1_svg");
+      svg.selectAll("*").remove();
+    
+
     var data = this.props.data1;
-    var temp_data = d3.flatRollup(
-      data,
-      (d) => d.length,
-      (d) => d.day
-    );
-    console.log(temp_data); // Check the format of the data in the conosole
+    var selectedTarget = this.props.selectedTarget;
+    var selectedCategory = this.state.selectedCategory;
 
-    var container = d3
-      .select(".child1_svg")
-      .attr("width", w + margin.left + margin.right)
-      .attr("height", h + margin.top + margin.bottom)
-      .select(".g_1")
-      .attr("transform", `translate(${margin.left}, ${margin.top})`);
+  if (!data || !selectedTarget || !selectedCategory) {
+    return; 
+  }
 
+    var temp_data = this.calculateAverages(data, this.state.selectedCategory, this.props.selectedTarget);
+    console.log('temp_data:', temp_data); 
+
+
+if (!Array.isArray(temp_data)) {
+  console.error('temp_data is not an array:', temp_data);
+  return;
+}
     // X axis
     var x_data = temp_data.map((item) => item[0]);
     var x_scale = d3
       .scaleBand()
       .domain(x_data)
-      .range([margin.left, w])
-      .padding(0.2);
+      .range([0, w]) 
+      .padding(0.03);
+    
+    var svg = d3.select(".child1_svg");
+    
+    svg.attr("width", w + margin.left + margin.right)
+       .attr("height", h + margin.top + margin.bottom);
 
+    var container = svg.append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+    
     container
-      .selectAll(".x_axis_g")
-      .data([0])
-      .join("g")
-      .attr("class", "x_axis_g")
+      .append("g") 
       .attr("transform", `translate(0, ${h})`)
       .call(d3.axisBottom(x_scale));
-    // Add Y axis
-    var y_data = temp_data.map((item) => item[1]);
-    var y_scale = d3
-      .scaleLinear()
-      .domain([0, d3.max(y_data)])
-      .range([h, 0]);
 
-    container
-      .selectAll(".y_axis_g")
-      .data([0])
-      .join("g")
-      .attr("class", "y_axis_g")
-      .attr("transform", `translate(${margin.left},0)`)
-      .call(d3.axisLeft(y_scale));
+var y_data = temp_data.map((item) => item[1]);
+var y_scale = d3
+  .scaleLinear()
+  .domain([0, d3.max(y_data)])
+  .range([h, 0]);
 
-    container
-      .selectAll("rect")
-      .data(temp_data)
-      .enter()
-      .append("rect")
-      .attr("x", function (d) {
-        return x_scale(d[0]);
-      })
-      .attr("y", function (d) {
-        return y_scale(d[1]);
-      })
-      .attr("width", x_scale.bandwidth())
-      .attr("height", function (d) {
-        return h - y_scale(d[1]);
-      })
-      .attr("fill", "#69b3a2");
+container
+  .append("g") 
+  .call(d3.axisLeft(y_scale));
+    
+var rectGroup = container.append("g");
+
+rectGroup
+  .selectAll("rect")
+  .data(temp_data)
+  .join("rect")
+  .attr("x", function (d) {
+    return x_scale(d[0]);
+  })
+  .attr("y", function (d) {
+    return y_scale(d[1]);
+  })
+  .attr("width", x_scale.bandwidth())
+  .attr("height", function (d) {
+    return h - y_scale(d[1]);
+  })
+  .attr("fill", "#b0b0b0");
+
+  rectGroup
+  .selectAll("text")
+  .data(temp_data)
+  .join("text")
+  .attr("x", function (d) {
+    return x_scale(d[0]) + x_scale.bandwidth() / 2; 
+  })
+  .attr("y", function (d) {
+    return y_scale(d[1]) + 20; 
+  })
+  .text(function (d) {
+    return parseFloat(d[1]).toFixed(5); 
+  })
+  .attr("text-anchor", "middle") 
+  .attr("dominant-baseline", "ideographic") 
+  .attr("fill", "black");
+
+
   }
   render() {
+    const categories = ['sex', 'smoker', 'day', 'time'];
+
     return (
-      <svg className="child1_svg">
-        <g className="g_1"></g>
-      </svg>
+
+      <div>
+        <div>
+          {categories.map((category, index) => (
+            <label key={index}>
+              <input 
+                type="radio" 
+                value={category} 
+                checked={this.state.selectedCategory === category}
+                onChange={this.handleRadioChange} 
+              /> 
+              {category}
+            </label>
+          ))}
+        </div>
+        <svg className="child1_svg">
+          <g className="g_1"></g>
+        </svg>
+      </div>
     );
   }
 }
