@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/tipgraphs/static/css/main.0a693055.css",
+    "main.js": "/tipgraphs/static/js/main.a0193692.js",
+    "static/js/453.a6a97343.chunk.js": "/tipgraphs/static/js/453.a6a97343.chunk.js",
+    "static/media/tips.csv": "/tipgraphs/static/media/tips.43007c7e472255eef549.csv",
+    "index.html": "/tipgraphs/index.html",
+    "main.0a693055.css.map": "/tipgraphs/static/css/main.0a693055.css.map",
+    "main.a0193692.js.map": "/tipgraphs/static/js/main.a0193692.js.map",
+    "453.a6a97343.chunk.js.map": "/tipgraphs/static/js/453.a6a97343.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0a693055.css",
+    "static/js/main.a0193692.js"
+  ]
+}
