@@ -86,6 +86,7 @@ class App extends Component {
           <Graph3
             data2={this.state.data}
             selectedVariables={this.state.selectedVariables}
+            onCellClick={this.handleCellClick}
           ></Graph3>
         </div>
       </div>

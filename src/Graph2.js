@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import * as d3 from "d3";
-import Graph3 from "./Graph3";
 
 
 class Graph2 extends Component {
@@ -188,12 +187,7 @@ class Graph2 extends Component {
             <g className="legend"></g>
           </svg>
         </div>
-        <div>
-          <Graph3
-            data2={this.state.data}
-            onCellClick={this.handleCellClick}
-          />
-        </div>
+        
       </div>
     );
   }
