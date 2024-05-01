@@ -33,7 +33,7 @@ class Graph1 extends Component {
   componentDidUpdate() {
     var margin = { top: 5, right: 30, bottom: 60, left: 50 },
       w = 500 - margin.left - margin.right,
-      h = 400 - margin.top - margin.bottom;
+      h = 300 - margin.top - margin.bottom;
 
       var svg = d3.select(".child1_svg");
       svg.selectAll("*").remove();

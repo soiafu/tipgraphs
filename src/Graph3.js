@@ -9,20 +9,21 @@ class Graph3 extends Component {
   componentDidMount() {
     //console.log("componentDidMount (data is): ", this.props.data1);
     this.setState({ x_scale: 10 });
-  }
-  componentDidUpdate() {
+  };
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.selectedVariables === this.state.selectedVariables) {
+      return;
+    }
     // set the dimensions and margins of the graph
     var margin = { top: 10, right: 10, bottom: 30, left: 20 },
-      w = 1300 - margin.left - margin.right,
-      h = 250 - margin.top - margin.bottom;
+      w = 900 - margin.left - margin.right,
+      h = 200 - margin.top - margin.bottom;
   
-    var data = this.props.data3;
-    var temp_data = d3.flatRollup(
-      data,
-      (d) => d.length,
-      (d) => d.day
-    );
-    console.log(temp_data); // Check the format of the data in the console
+    
+    const data = this.props.data2.map((d) => ({
+      x: d[this.props.selectedVariables[0]],
+      y: d[this.props.selectedVariables[1]],
+    }));
   
     var container = d3
       .select(".child3_svg")
@@ -30,9 +31,18 @@ class Graph3 extends Component {
       .attr("height", h + margin.top + margin.bottom)
       .select(".g_3")
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
-  
+
+    if (container.empty()) {
+      container = d3.select(".child3_svg")
+        .append("g")
+        .attr("class", "g_3")
+        .attr("transform", `translate(${margin.left}, ${margin.top})`);
+    } else {
+      container.attr("transform", `translate(${margin.left}, ${margin.top})`);
+    }
+
     // X axis
-    var x_data = temp_data.map((item) => item[0]);
+    var x_data = data.map((item) => item[0]);
     var x_scale = d3
       .scaleBand()
       .domain(x_data)
@@ -48,7 +58,7 @@ class Graph3 extends Component {
       .call(d3.axisBottom(x_scale));
   
     // Add Y axis
-    var y_data = temp_data.map((item) => item[1]);
+    var y_data = data.map((item) => item[1]);
     var y_scale = d3
       .scaleLinear()
       .domain([0, d3.max(y_data)])
@@ -64,7 +74,7 @@ class Graph3 extends Component {
   
     container
       .selectAll("circle") // Use circles instead of rectangles
-      .data(temp_data)
+      .data(data)
       .enter()
       .append("circle")
       .attr("cx", function (d) {
@@ -76,7 +86,8 @@ class Graph3 extends Component {
       .attr("r", 3) // Set the radius of the circle
       .style("fill", "#69b3a2"); // Set the color of the circle
   }
-  
+    
+
   render() {
     return (
       <svg className="child3_svg">
@@ -84,5 +95,6 @@ class Graph3 extends Component {
       </svg>
     );
   }
+
 }
 export default Graph3;

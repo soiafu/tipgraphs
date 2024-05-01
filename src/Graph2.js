@@ -37,9 +37,9 @@ class Graph2 extends Component {
 
   componentDidUpdate() {
     // Set the dimensions and margins of the graph
-    var margin = { top: 80, right: 85, bottom: 30, left: 50 },
+    var margin = { top: 80, right: 85, bottom: 0, left: 50 },
       w = 520 - margin.left - margin.right,
-      h = 450 - margin.top - margin.bottom;
+      h = 300 - margin.top - margin.bottom;
 
     var data = this.props.data2;
 
@@ -59,7 +59,7 @@ class Graph2 extends Component {
 
     // Define variables (columns)
     const columns = ["tip", "total_bill", "size"];
-    const numColumns = columns.length;
+    //const numColumns = columns.length;
 
     // Calculate correlation coefficients between variables
     const correlationMatrix = [];
@@ -87,7 +87,7 @@ class Graph2 extends Component {
     container.append("g").call(d3.axisLeft(y));
 
     // Cellsize
-    const cellSize = w / numColumns;
+    //const cellSize = w / numColumns;
 
     const rects = container
       .selectAll()
@@ -104,14 +104,12 @@ class Graph2 extends Component {
       .attr("height", y.bandwidth())
       .style("fill", (d) => colorScale(d.value));
 
-    // Add click event handler to the rectangles
+   
     rects.on("click", (event, d) => {
-      console.log(
-        `Clicked on value: ${d.value.toFixed(2)} at (${columns[d.column]}, ${
-          columns[d.row]
-        })`
-      );
+      const selectedVariables = [columns[d.row], columns[d.column]];
+      this.props.onCellClick(selectedVariables);
     });
+
 
     // Display text on the rectangles
     container
@@ -132,7 +130,7 @@ class Graph2 extends Component {
 
       const legendWidth = 100;
       const legendHeight = h; 
-      const legendPadding = 20;
+      //const legendPadding = 20;
 
       const legend = d3
         .select(".legend")
@@ -180,6 +178,7 @@ class Graph2 extends Component {
   }
 
   render() {
+    
     return (
       <svg className="child2_svg">
         <g className="g_2"></g>
