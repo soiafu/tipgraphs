@@ -31,9 +31,9 @@ class Graph1 extends Component {
     this.setState({ selectedCategory: event.target.value });
   };
   componentDidUpdate() {
-    var margin = { top: 5, right: 30, bottom: 60, left: 30 },
+    var margin = { top: 5, right: 30, bottom: 60, left: 50 },
       w = 500 - margin.left - margin.right,
-      h = 250 - margin.top - margin.bottom;
+      h = 400 - margin.top - margin.bottom;
 
       var svg = d3.select(".child1_svg");
       svg.selectAll("*").remove();
@@ -63,7 +63,7 @@ if (!Array.isArray(temp_data)) {
       .range([0, w]) 
       .padding(0.03);
     
-    var svg = d3.select(".child1_svg");
+    svg = d3.select(".child1_svg");
     
     svg.attr("width", w + margin.left + margin.right)
        .attr("height", h + margin.top + margin.bottom);
