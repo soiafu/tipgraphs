@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import * as d3 from "d3";
+import Graph3 from "./Graph3";
+
 
 class Graph2 extends Component {
   constructor(props) {
@@ -178,13 +180,23 @@ class Graph2 extends Component {
   }
 
   render() {
-    
     return (
-      <svg className="child2_svg">
-        <g className="g_2"></g>
-        <g className="legend"></g>
-      </svg>
+      <div>
+        <div>
+          <svg className="child2_svg">
+            <g className="g_2"></g>
+            <g className="legend"></g>
+          </svg>
+        </div>
+        <div>
+          <Graph3
+            data2={this.state.data}
+            onCellClick={this.handleCellClick}
+          />
+        </div>
+      </div>
     );
   }
+  
 }
 export default Graph2;

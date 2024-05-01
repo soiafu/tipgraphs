@@ -52,6 +52,7 @@ class App extends Component {
   handleCellClick = (selectedVariables) => {
     this.setState({ selectedVariables });
   };
+  
 
   render() {
     return (
@@ -79,12 +80,11 @@ class App extends Component {
               selectedTarget={this.state.selectedTarget}
               onCellClick={this.handleCellClick}
             ></Graph2>
-          </div>
+         </div>
         </div>
         <div className="graph">
           <Graph3
-            data3={this.state.data}
-            selectedTarget={this.state.selectedTarget}
+            data2={this.state.data}
             selectedVariables={this.state.selectedVariables}
           ></Graph3>
         </div>
